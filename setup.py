@@ -55,7 +55,7 @@ with TemporaryDirectory(dir = ".") as build_directory:
     makedirs(path.join(build_directory, "src", "dNG"))
 
     _setup = { "name": "pas-crud-engine",
-               "version": get_version(),
+               "version": get_version()[1:],
                "description": "Python Application Services",
                "long_description": """"pas_crud_engine" provides a CRUD and REST like internal API.""",
                "author": "direct Netware Group et al.",
