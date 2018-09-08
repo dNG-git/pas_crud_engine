@@ -138,6 +138,7 @@ requested.
 
         if (len(self.operation_selector_list) < 1):
             _return.append({ "method": self._get_crud_instance_method(operation),
+                             "method_name": operation,
                              "select_id": None
                              })
         else:
