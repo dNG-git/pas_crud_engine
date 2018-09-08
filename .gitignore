@@ -1,0 +1,10 @@
+__py*
+.*
+*.pyc
+nbproject
+/_extras
+/build
+/dist
+/make*.py*
+/MANIFEST
+/pas_crud_engine*
