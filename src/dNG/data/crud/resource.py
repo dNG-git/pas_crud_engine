@@ -43,7 +43,7 @@ class Resource(object):
              Mozilla Public License, v. 2.0
     """
 
-    OPERATIONS_SUPPORTED = [ "get", "delete", "execute", "insert", "is_valid", "update", "upsert" ]
+    OPERATIONS_SUPPORTED = [ "create", "delete", "execute", "get", "is_valid", "update", "upsert" ]
 
     def __init__(self, crud_url):
         """
