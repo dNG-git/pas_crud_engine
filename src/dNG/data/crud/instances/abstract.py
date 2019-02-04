@@ -21,7 +21,10 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 
 from dNG.data.crud.access_denied_exception import AccessDeniedException
 from dNG.data.crud.input_validation_exception import InputValidationException
+from dNG.data.crud.operation_not_supported_exception import OperationNotSupportedException
 from dNG.data.supports_mixin import SupportsMixin
+from dNG.runtime.not_implemented_exception import NotImplementedException
+from dNG.runtime.operation_not_supported_exception import OperationNotSupportedException as OperationNotSupportedRuntimeException
 
 class Abstract(SupportsMixin):
     """
@@ -141,7 +144,10 @@ Catch certain exceptions and wrap them in CRUD defined ones.
 
         def proxymethod(self, *args, **kwargs):
             try: return _callable(self, *args, **kwargs)
+            except NotImplementedException as handled_exception: raise OperationNotSupportedException(_exception = handled_exception)
+            except OperationNotSupportedRuntimeException as handled_exception: raise OperationNotSupportedException(_exception = handled_exception)
             except TypeError as handled_exception: raise InputValidationException(_exception = handled_exception)
+            except ValueError as handled_exception: raise InputValidationException(_exception = handled_exception)
         #
 
         return proxymethod
