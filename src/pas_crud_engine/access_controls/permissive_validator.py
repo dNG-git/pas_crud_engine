@@ -17,12 +17,10 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-# pylint: disable=import-error
-
-from dNG.data.crud.access_denied_exception import AccessDeniedException
-from dNG.runtime.type_exception import TypeException
+from dpt_runtime.type_exception import TypeException
 
 from .abstract import Abstract
+from ..access_denied_exception import AccessDeniedException
 
 class PermissiveValidator(Abstract):
     """
@@ -33,7 +31,7 @@ is not blacklisted.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas
 :subpackage: crud_engine
-:since:      v0.1.0
+:since:      v1.0.0
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
     """
@@ -42,7 +40,7 @@ is not blacklisted.
         """
 Constructor __init__(PermissiveValidator)
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         Abstract.__init__(self)
@@ -58,10 +56,11 @@ Blacklisted operations which will cause an "AccessDeniedException".
     @property
     def blacklisted_operations(self):
         """
-Returns a list of blacklisted operations which will cause an "AccessDeniedException".
+Returns a list of blacklisted operations which will cause an
+"AccessDeniedException".
 
 :return: (List) Blacklisted operations
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         return self._blacklisted_operations
@@ -70,11 +69,12 @@ Returns a list of blacklisted operations which will cause an "AccessDeniedExcept
     @blacklisted_operations.setter
     def blacklisted_operations(self, operations):
         """
-Sets the list of blacklisted operations which will cause an "AccessDeniedException".
+Sets the list of blacklisted operations which will cause an
+"AccessDeniedException".
 
 :param operations: List of blacklisted operations
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         if (not isinstance(operations, list)): raise TypeException("List of blacklisted operations given is invalid")
@@ -87,9 +87,10 @@ Validate access permissions for the requested operation and CRUD entity
 instance specific data given.
 
 :param crud_instance: CRUD entity instance
-:param operation: CRUD operation requested including module and instance name
+:param operation: CRUD operation requested including module and instance
+       name
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         if (operation in self._blacklisted_operations): raise AccessDeniedException("Operation '{0}' is blacklisted".format(operation))

@@ -19,13 +19,12 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 
 import re
 
-from dNG.data.crud.call_context import CallContext
-from dNG.data.crud.instances.abstract import Abstract as AbstractInstance
-from dNG.data.crud.operation_not_supported_exception import OperationNotSupportedException
-from dNG.data.text.input_filter import InputFilter
-from dNG.runtime.named_loader import NamedLoader
+from dpt_module_loader import NamedClassLoader
+from dpt_runtime.input_filter import InputFilter
 
-from .abstract import Abstract
+from ...instances import Abstract as AbstractInstance
+from ...operation_not_supported_exception import OperationNotSupportedException
+from ...protocol import Abstract, CallContext
 
 class XPythonModule(Abstract):
     """
@@ -35,7 +34,7 @@ class XPythonModule(Abstract):
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas
 :subpackage: crud_engine
-:since:      v0.1.0
+:since:      v1.0.0
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
     """
@@ -51,7 +50,7 @@ Constructor __init__(XPythonModule)
 
 :param crud_url_elements: CRUD URL elements
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         Abstract.__init__(self, crud_url_elements)
@@ -88,7 +87,7 @@ List of path elements for the operation name executed
 Returns the access control validator used for local CRUD entity instances.
 
 :return: (object) Access control validator instance; None if not set
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         return self._instance.access_control
@@ -101,7 +100,7 @@ Sets the access control validator used for local CRUD entity instances.
 
 :param validator: Access control validator instance
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         self._instance.access_control = validator
@@ -110,13 +109,13 @@ Sets the access control validator used for local CRUD entity instances.
     def __getattr__(self, name):
         """
 python.org: Called when an attribute lookup has not found the attribute in
-the usual places (i.e. it is not an instance attribute nor is it found in the
-class tree for self).
+the usual places (i.e. it is not an instance attribute nor is it found in
+the class tree for self).
 
 :param name: Attribute name
 
 :return: (mixed) Operation return value
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         return self._get_call_stack_method(name)
@@ -130,7 +129,7 @@ requested.
 :param operation: CRUD operation
 
 :return: (list) List of methods to be called
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         _return = [ ]
@@ -140,7 +139,7 @@ requested.
             _return.append({ "method": self._get_crud_instance_method(operation),
                              "method_name": operation,
                              "select_id": None
-                             })
+                           })
         else:
             operation_selector_list = self.operation_selector_list.copy()
 
@@ -179,7 +178,7 @@ URL resource requested.
 :param operation: CRUD operation
 
 :return: (object) Python callable for the URL resource requested
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         call_stack = self._get_call_stack(operation)
@@ -218,7 +217,7 @@ Returns the matching method of the underlying CRUD entity instance.
 :param name: CRUD entity instance method name
 
 :return: (object) CRUD entity instance method
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         _return = getattr(self._instance, name, None)
@@ -235,10 +234,10 @@ requested.
 :param module_name: CRUD entity module name
 :param instance_class_name: CRUD entity class name
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
-        crud_instance = NamedLoader.get_instance("dNG.data.crud.instances.{0}.{1}".format(module_name, instance_class_name))
+        crud_instance = NamedClassLoader.get_instance_in_namespace("crud", "instances.{0}.{1}".format(module_name, instance_class_name))
         if (not isinstance(crud_instance, AbstractInstance)): raise OperationNotSupportedException()
 
         self._instance = crud_instance
@@ -251,7 +250,7 @@ Returns true if the feature requested is supported by this instance.
 :param feature: Feature name string
 
 :return: (bool) True if supported
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         return (Abstract.is_supported(self, feature)

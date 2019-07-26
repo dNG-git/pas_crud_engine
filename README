@@ -7,7 +7,7 @@ The Python Application Services of the direct Netware Group contain
 different modules. Each represents one aspect, feature or provides the base
 functionality for other modules.
 
-"pas_crud_engine" provides a CRUD and REST like internal API.
+"pas-crud-engine" provides a CRUD and REST like internal API.
 
 ----------------------------------------------------------------------------
 Licensing

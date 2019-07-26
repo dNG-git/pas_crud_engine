@@ -17,14 +17,13 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-# pylint: disable=import-error
+from dpt_json import JsonResource
+from dpt_runtime.binary import Binary
+from dpt_runtime.supports_mixin import SupportsMixin
+from dpt_threading.thread_lock import ThreadLock
 
-from dNG.data.binary import Binary
-from dNG.data.crud.input_validation_exception import InputValidationException
-from dNG.data.crud.operation_not_supported_exception import OperationNotSupportedException
-from dNG.data.json_resource import JsonResource
-from dNG.data.supports_mixin import SupportsMixin
-from dNG.runtime.thread_lock import ThreadLock
+from ..input_validation_exception import InputValidationException
+from ..operation_not_supported_exception import OperationNotSupportedException
 
 class AbstractFilterParser(SupportsMixin):
     """
@@ -35,7 +34,7 @@ CRUD instance specific condition definition.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas
 :subpackage: crud_engine
-:since:      v0.1.0
+:since:      v1.0.0
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
     """
@@ -46,7 +45,7 @@ Constructor __init__(AbstractFilterParser)
 
 :param filter_string: Raw JSON filter definition
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         SupportsMixin.__init__(self)
@@ -81,7 +80,7 @@ Returns the parser specific filter representation for the raw filter string
 given.
 
 :return: (mixed) Parser specific filter representation
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         if (self._filter is None): self._parse_raw_filter_string()
@@ -90,11 +89,11 @@ given.
 
     def add_blacklisted_key(self, key):
         """
-@TODO:
+Adds the given key to the filter blacklist.
 
-:param key: Key of filter level being parsed
+:param key: Key to be blacklisted
 
-:since:  v0.1.0
+:since: v1.0.0
         """
 
         if (key not in self._blacklisted_keys):
@@ -113,7 +112,7 @@ Parses the given filter data representing an value or sub-condition.
 :param filter_data: Filter data
 
 :return: (mixed) Parser specific filter representation
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         _return = None
@@ -137,7 +136,7 @@ definition.
 :param filter_data: "and" concatenated dictionary
 
 :return: (mixed) Parser specific filter representation
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         raise OperationNotSupportedException()
@@ -151,7 +150,7 @@ Parses the given list representing an "or" concatenated filter definition.
 :param filter_list: "or" concatenated list
 
 :return: (mixed) Parser specific filter representation
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         raise OperationNotSupportedException()
@@ -159,7 +158,9 @@ Parses the given list representing an "or" concatenated filter definition.
 
     def _parse_raw_filter_string(self):
         """
-@TODO:
+Parses the top-level raw JSON filter definition.
+
+:since:  v1.0.0
         """
 
         if (self._filter is None):
@@ -174,11 +175,11 @@ Parses the given list representing an "or" concatenated filter definition.
 
     def remove_blacklisted_key(self, key):
         """
-@TODO:
+Removes the given key from the filter blacklist.
 
-:param key: Key of filter level being parsed
+:param key: Blacklisted key
 
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         if (key in self._blacklisted_keys):
@@ -194,7 +195,7 @@ Parses the given list representing an "or" concatenated filter definition.
 Sets an empty parser specific filter representation for an empty filter
 string.
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         raise OperationNotSupportedException()

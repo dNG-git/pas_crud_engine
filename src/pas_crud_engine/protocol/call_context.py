@@ -17,7 +17,7 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.runtime.exception_log_trap import ExceptionLogTrap
+from dpt_runtime.exception_log_trap import ExceptionLogTrap
 
 class CallContext(object):
     """
@@ -28,7 +28,7 @@ for CRUD requests.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas
 :subpackage: crud_engine
-:since:      v0.1.0
+:since:      v1.0.0
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
     """
@@ -40,7 +40,7 @@ Constructor __init__(CallContext)
 :param callee_instance: Callee instance
 :param base_name: Method base name for "pre_*" and "post_*" calls
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         self.call_context_base_name = base_name
@@ -57,7 +57,7 @@ Callee instance used for pre and post request methods if applicable.
         """
 python.org: Enter the runtime context related to this object.
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         if (self.callee_instance is not None):
@@ -67,8 +67,8 @@ python.org: Enter the runtime context related to this object.
                                "_pre_call"
                               )
 
-                method = getattr(self.callee_instance, method_name, None)
-                if (method is not None): method()
+                _callable = getattr(self.callee_instance, method_name, None)
+                if (callable(_callable)): _callable()
             #
         #
     #
@@ -78,7 +78,7 @@ python.org: Enter the runtime context related to this object.
 python.org: Exit the runtime context related to this object.
 
 :return: (bool) True to suppress exceptions
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         if (self.callee_instance is not None):
@@ -88,16 +88,16 @@ python.org: Exit the runtime context related to this object.
                                "_post_call"
                               )
 
-                method = getattr(self.callee_instance, method_name, None)
+                _callable = getattr(self.callee_instance, method_name, None)
 
-                if (method is not None):
+                if (callable(_callable)):
                     kwargs = { }
 
                     if (exc_type is not None or exc_value is not None):
                         kwargs['exception'] = { "type": exc_type, "value": exc_value, "traceback": traceback }
                     #
 
-                    method(**kwargs)
+                    _callable(**kwargs)
                 #
             #
         #

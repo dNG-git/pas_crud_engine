@@ -17,14 +17,19 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-# pylint: disable=import-error
+from functools import wraps
 
-from dNG.data.crud.access_denied_exception import AccessDeniedException
-from dNG.data.crud.input_validation_exception import InputValidationException
-from dNG.data.crud.operation_not_supported_exception import OperationNotSupportedException
-from dNG.data.supports_mixin import SupportsMixin
-from dNG.runtime.not_implemented_exception import NotImplementedException
-from dNG.runtime.operation_not_supported_exception import OperationNotSupportedException as OperationNotSupportedRuntimeException
+from dpt_runtime.io_exception import IOException
+from dpt_runtime.not_implemented_exception import NotImplementedException
+from dpt_runtime.operation_not_supported_exception import OperationNotSupportedException as _OperationNotSupportedException
+from dpt_runtime.supports_mixin import SupportsMixin
+from dpt_runtime.type_exception import TypeException
+
+from ..access_controls.abstract import Abstract as AbstractAccessControlValidator
+from ..access_denied_exception import AccessDeniedException
+from ..input_validation_exception import InputValidationException
+from ..operation_failed_exception import OperationFailedException
+from ..operation_not_supported_exception import OperationNotSupportedException
 
 class Abstract(SupportsMixin):
     """
@@ -34,7 +39,7 @@ class Abstract(SupportsMixin):
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas
 :subpackage: crud_engine
-:since:      v0.1.0
+:since:      v1.0.0
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
     """
@@ -48,7 +53,7 @@ List of attribute names for this CRUD entity instance which start with an unders
         """
 Constructor __init__(Abstract)
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
         SupportsMixin.__init__(self)
@@ -69,7 +74,7 @@ access permissions at different stages of CRUD execution including but not
 limited before and after element loading.
 
 :return: (mixed) AccessControlValidator instance; None if not defined
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         return self._access_control_instance
@@ -82,10 +87,10 @@ Sets the "AccessControlValidator" instance to be called.
 
 :param validator: AccessControlValidator instance
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
-        #if (isinstance
+        if (not isinstance(validator, AbstractAccessControlValidator)): raise TypeException("Access control validator given is invalid")
         self._access_control_instance = validator
     #
 
@@ -94,7 +99,7 @@ Sets the "AccessControlValidator" instance to be called.
 Returns false if no access control validation is supported.
 
 :return: (bool) True if access control validation is supported
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         return (self.access_control is not None)
@@ -106,7 +111,7 @@ Returns false if no access control validation is supported.
 Returns all kwargs after filtering keys and their values.
 
 :return: (dict) Filtered kwargs
-:since:  v0.1.0
+:since:  v1.0.0
         """
 
         return dict(( key, kwargs[key] ) for key in kwargs if (key[:1] != "_" and key not in cls.UNDERSCORE_ATTRIBUTE_KEYS))
@@ -117,12 +122,13 @@ Returns all kwargs after filtering keys and their values.
         """
 Restricts access to the callable to valid users.
 
-:param callable: Wrapped code
+:param _callable: Wrapped code
 
 :return: (object) Proxy method
-:since:  v0.1.0
+:since:  v1.0.0
     """
 
+        @wraps(_callable)
         def proxymethod(self, *args, **kwargs):
             if (not self.is_supported("access_control_validation")): raise AccessDeniedException()
             return _callable(self, *args, **kwargs)
@@ -136,16 +142,18 @@ Restricts access to the callable to valid users.
         """
 Catch certain exceptions and wrap them in CRUD defined ones.
 
-:param callable: Wrapped code
+:param _callable: Wrapped code
 
 :return: (object) Proxy method
-:since:  v0.1.0
+:since:  v1.0.0
     """
 
+        @wraps(_callable)
         def proxymethod(self, *args, **kwargs):
             try: return _callable(self, *args, **kwargs)
             except NotImplementedException as handled_exception: raise OperationNotSupportedException(_exception = handled_exception)
-            except OperationNotSupportedRuntimeException as handled_exception: raise OperationNotSupportedException(_exception = handled_exception)
+            except _OperationNotSupportedException as handled_exception: raise OperationNotSupportedException(_exception = handled_exception)
+            except IOException as handled_exception: raise OperationFailedException(_exception = handled_exception)
             except TypeError as handled_exception: raise InputValidationException(_exception = handled_exception)
             except ValueError as handled_exception: raise InputValidationException(_exception = handled_exception)
         #

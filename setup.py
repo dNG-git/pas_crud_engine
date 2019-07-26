@@ -19,17 +19,17 @@ setup.py
 from os import makedirs, path
 
 try:
-    from setuptools.core import setup
+    from setuptools import setup
 except ImportError:
-    from distutils.core import setup
+    from distutils import setup
 #
 
 try:
-    from dNG.distutils.command.build_py import BuildPy
-    from dNG.distutils.command.sdist import Sdist
-    from dNG.distutils.temporary_directory import TemporaryDirectory
+    from dpt_builder_suite.distutils.build_py import BuildPy
+    from dpt_builder_suite.distutils.sdist import Sdist
+    from dpt_builder_suite.distutils.temporary_directory import TemporaryDirectory
 except ImportError:
-    raise RuntimeError("'dng-builder-suite' prerequisite not matched")
+    raise RuntimeError("'dpt-builder-suite' prerequisite not matched")
 #
 
 def get_version():
@@ -37,10 +37,10 @@ def get_version():
 Returns the version currently in development.
 
 :return: (str) Version string
-:since:  v0.1.0
+:since:  v1.0.0
     """
 
-    return "v0.1.0"
+    return "v1.0.0"
 #
 
 with TemporaryDirectory(dir = ".") as build_directory:
@@ -52,22 +52,14 @@ with TemporaryDirectory(dir = ".") as build_directory:
     Sdist.set_build_target_path(build_directory)
     Sdist.set_build_target_parameters(parameters)
 
-    makedirs(path.join(build_directory, "src", "dNG"))
+    package_dir = path.join(build_directory, "src")
+    makedirs(package_dir)
 
-    _setup = { "name": "pas-crud-engine",
-               "version": get_version()[1:],
-               "description": "Python Application Services",
-               "long_description": """"pas_crud_engine" provides a CRUD and REST like internal API.""",
-               "author": "direct Netware Group et al.",
-               "author_email": "web@direct-netware.de",
-               "license": "MPL2",
-               "url": "https://www.direct-netware.de/redirect?pas;crud_engine",
-
-               "platforms": [ "any" ],
-
-               "packages": [ "dNG" ],
-
-               "data_files": [ ( "docs", [ "LICENSE", "README" ]) ]
+    _setup = { "version": get_version()[1:],
+               "package_dir": { "": package_dir },
+               "packages": [ "pas_crud_engine" ],
+               "data_files": [ ( "docs", [ "LICENSE", "README" ]) ],
+               "test_suite": "tests"
              }
 
     # Override build_py to first run builder.py

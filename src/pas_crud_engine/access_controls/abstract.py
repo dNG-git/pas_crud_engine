@@ -17,52 +17,36 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-# pylint: disable=import-error
+from dpt_runtime.not_implemented_exception import NotImplementedException
+from dpt_runtime.supports_mixin import SupportsMixin
 
-from .abstract_filter_parser import AbstractFilterParser
-
-class FlatFilterParser(AbstractFilterParser):
+class Abstract(SupportsMixin):
     """
-"FlatFilterParser" provides a condition definition based on a flat
-dictionary.
+"Abstract" provides common methods for the "AccessControlValidator"
+instance. It is used to validate access permissions at different stages of
+CRUD execution including but not limited before and after element loading.
 
 :author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas
 :subpackage: crud_engine
-:since:      v0.1.0
+:since:      v1.0.0
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
     """
 
-    def _parse_and_concatenation(self, filter_data):
+    def validate(self, crud_instance, operation, **kwargs):
         """
-Parses the given dictionary representing an "and" concatenated filter
-definition.
+Validate access permissions for the requested operation and CRUD entity
+instance specific data given.
 
-:param filter_data: "and" concatenated dictionary
+:param crud_instance: CRUD entity instance
+:param operation: CRUD operation requested including module and instance
+       name
 
-:return: (mixed) Parser specific filter representation
-:since:  v0.1.0
-        """
-
-        _return = { }
-
-        for key in filter_data:
-            _return[key] = self._parse(key, filter_data[key])
-        #
-
-        return _return
-    #
-
-    def _set_empty_filter(self):
-        """
-Sets an empty parser specific filter representation for an empty filter
-string.
-
-:since: v0.1.0
+:since: v1.0.0
         """
 
-        self._filter = { }
+        raise NotImplementedException()
     #
 #

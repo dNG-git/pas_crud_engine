@@ -17,61 +17,50 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.data.supports_mixin import SupportsMixin
+from .abstract_filter_parser import AbstractFilterParser
 
-class Abstract(SupportsMixin):
+class FlatFilterParser(AbstractFilterParser):
     """
-"Abstract" provides basic CRUD resource methods for protocol
-implementations.
+"FlatFilterParser" provides a condition definition based on a flat
+dictionary.
 
 :author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas
 :subpackage: crud_engine
-:since:      v0.1.0
+:since:      v1.0.0
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
     """
 
-    def __init__(self, crud_url_elements):
+    def _parse_and_concatenation(self, filter_data):
         """
-Constructor __init__(Abstract)
+Parses the given dictionary representing an "and" concatenated filter
+definition.
 
-:param crud_url_elements: CRUD URL elements
+:param filter_data: "and" concatenated dictionary
 
-:since: v0.1.0
+:return: (mixed) Parser specific filter representation
+:since:  v1.0.0
         """
 
-        SupportsMixin.__init__(self)
+        _return = { }
 
-        self._context_manager_callee_instance = None
-        """
-Callee instance used for pre and post request methods if applicable.
-        """
+        for key in filter_data:
+            _return[key] = self._parse(key, filter_data[key])
+        #
+
+        return _return
     #
 
-    @property
-    def context_manager_callee(self):
+    def _set_empty_filter(self):
         """
-Returns the callee instance set.
+Sets an empty parser specific filter representation for an empty filter
+string.
 
-:return: (object) Callee instance; None if not defined
-:since:  v0.1.0
-        """
-
-        return self._context_manager_callee_instance
-    #
-
-    @context_manager_callee.setter
-    def context_manager_callee(self, callee_instance):
-        """
-Sets the callee instance used for pre and post request methods.
-
-:param callee_instance: Callee instance
-
-:since: v0.1.0
+:since: v1.0.0
         """
 
-        self._context_manager_callee_instance = callee_instance
+        self._filter = { }
     #
 #

@@ -17,9 +17,9 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.runtime.io_exception import IOException
+from .operation_failed_exception import OperationFailedException
 
-class InputValidationException(IOException):
+class InputValidationException(OperationFailedException):
     """
 Exception if the CRUD operation identifies malformed input.
 
@@ -27,7 +27,7 @@ Exception if the CRUD operation identifies malformed input.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas
 :subpackage: crud_engine
-:since:      v0.1.0
+:since:      v1.0.0
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
     """
@@ -39,9 +39,9 @@ Constructor __init__(InputValidationException)
 :param value: Exception message value
 :param _exception: Inner exception
 
-:since: v0.1.0
+:since: v1.0.0
         """
 
-        IOException.__init__(self, value, _exception)
+        OperationFailedException.__init__(self, value, _exception)
     #
 #

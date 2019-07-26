@@ -17,20 +17,9 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.runtime.operation_not_supported_exception import OperationNotSupportedException as _OperationNotSupportedException
-
-class OperationNotSupportedException(_OperationNotSupportedException):
-    """
-Exception if the CRUD operation is not supported.
-
-:author:     direct Netware Group et al.
-:copyright:  direct Netware Group - All rights reserved
-:package:    pas
-:subpackage: crud_engine
-:since:      v0.1.0
-:license:    https://www.direct-netware.de/redirect?licenses;mpl2
-             Mozilla Public License, v. 2.0
-    """
-
-    pass
-#
+from .access_denied_exception import AccessDeniedException
+from .input_validation_exception import InputValidationException
+from .nothing_matched_exception import NothingMatchedException
+from .operation_failed_exception import OperationFailedException
+from .operation_not_supported_exception import OperationNotSupportedException
+from .resource import Resource
