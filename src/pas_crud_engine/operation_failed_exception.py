@@ -32,7 +32,7 @@ Exception if the CRUD operation identifies malformed input.
              Mozilla Public License, v. 2.0
     """
 
-    def __init__(self, value = "An error occurred while executing operation", _exception = None):
+    def __init__(self, value = "An error occurred while executing the requested operation", _exception = None):
         """
 Constructor __init__(OperationFailedException)
 
