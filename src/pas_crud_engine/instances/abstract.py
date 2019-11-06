@@ -49,6 +49,12 @@ class Abstract(SupportsMixin):
 List of attribute names for this CRUD entity instance which start with an underscore.
     """
 
+    __slots__ = [ "_access_control_instance" ] + SupportsMixin._mixin_slots_
+    """
+python.org: __slots__ reserves space for the declared variables and prevents
+the automatic creation of __dict__ and __weakref__ for each instance.
+    """
+
     def __init__(self):
         """
 Constructor __init__(Abstract)

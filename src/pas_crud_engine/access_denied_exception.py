@@ -32,6 +32,12 @@ Exception if the CRUD operation has denied access.
              Mozilla Public License, v. 2.0
     """
 
+    __slots__ = [ ]
+    """
+python.org: __slots__ reserves space for the declared variables and prevents
+the automatic creation of __dict__ and __weakref__ for each instance.
+    """
+
     def __init__(self, value = "Element operation denied access", _exception = None):
         """
 Constructor __init__(AccessDeniedException)

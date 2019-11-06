@@ -39,6 +39,12 @@ CRUD instance specific condition definition.
              Mozilla Public License, v. 2.0
     """
 
+    __slots__ = [ "_blacklisted_keys", "_filter", "_lock", "_raw_filter_string" ] + SupportsMixin._mixin_slots_
+    """
+python.org: __slots__ reserves space for the declared variables and prevents
+the automatic creation of __dict__ and __weakref__ for each instance.
+    """
+
     def __init__(self, filter_string):
         """
 Constructor __init__(AbstractFilterParser)
@@ -48,10 +54,10 @@ Constructor __init__(AbstractFilterParser)
 :since: v1.0.0
         """
 
-        SupportsMixin.__init__(self)
-
         filter_string = Binary.str(filter_string)
         if (not isinstance(filter_string, str)): raise InputValidationException("Filter given is invalid")
+
+        SupportsMixin.__init__(self)
 
         self._blacklisted_keys = [ ]
         """
@@ -61,13 +67,13 @@ List of keys marked as blacklisted
         """
 Parser specific filter representation
         """
-        self._raw_filter_string = filter_string.strip()
-        """
-Raw JSON filter definition
-        """
         self._lock = ThreadLock()
         """
 Thread safety lock
+        """
+        self._raw_filter_string = filter_string.strip()
+        """
+Raw JSON filter definition
         """
 
         if (len(self._raw_filter_string) < 1): self._set_empty_filter()

@@ -44,6 +44,12 @@ class XPythonModule(Abstract):
 RegExp to find non-word characters
     """
 
+    __slots__ = [ "_instance", "operation_selector_list" ]
+    """
+python.org: __slots__ reserves space for the declared variables and prevents
+the automatic creation of __dict__ and __weakref__ for each instance.
+    """
+
     def __init__(self, crud_url_elements):
         """
 Constructor __init__(XPythonModule)

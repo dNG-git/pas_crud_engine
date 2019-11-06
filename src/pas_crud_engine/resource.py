@@ -46,6 +46,15 @@ class Resource(object):
     """
 
     OPERATIONS_SUPPORTED = [ "create", "delete", "execute", "get", "is_valid", "update", "upsert" ]
+    """
+List of CRUD operation names
+    """
+
+    __slots__ = [ "_instance", "_path", "_protocol", "_url" ]
+    """
+python.org: __slots__ reserves space for the declared variables and prevents
+the automatic creation of __dict__ and __weakref__ for each instance.
+    """
 
     def __init__(self, crud_url):
         """

@@ -33,6 +33,12 @@ for CRUD requests.
              Mozilla Public License, v. 2.0
     """
 
+    __slots__ = [ "call_context_base_name", "callee_instance" ]
+    """
+python.org: __slots__ reserves space for the declared variables and prevents
+the automatic creation of __dict__ and __weakref__ for each instance.
+    """
+
     def __init__(self, callee_instance, base_name = None):
         """
 Constructor __init__(CallContext)
