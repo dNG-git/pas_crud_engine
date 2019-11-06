@@ -110,6 +110,9 @@ Returns false if no access control validation is supported.
         """
 Returns all kwargs after filtering keys and their values.
 
+:param cls: Python class
+:param kwargs: Keyword arguments to filter
+
 :return: (dict) Filtered kwargs
 :since:  v1.0.0
         """
@@ -151,6 +154,7 @@ Catch certain exceptions and wrap them in CRUD defined ones.
         @wraps(_callable)
         def proxymethod(self, *args, **kwargs):
             try: return _callable(self, *args, **kwargs)
+            except ( OperationFailedException, OperationNotSupportedException ): raise
             except NotImplementedException as handled_exception: raise OperationNotSupportedException(_exception = handled_exception)
             except _OperationNotSupportedException as handled_exception: raise OperationNotSupportedException(_exception = handled_exception)
             except IOException as handled_exception: raise OperationFailedException(_exception = handled_exception)
